@@ -1,0 +1,40 @@
+@mixin round($radius)
+  -webkit-border-radius: #{$radius}
+  -moz-border-radius: #{$radius}
+  border-radius: #{$radius}
+
+@mixin shadow($shadow)
+  -webkit-box-shadow: $shadow
+  -moz-box-shadow: $shadow
+
+div.dialog-container
+  width: 180px
+  position: absolute
+
+  div.content
+    @include round(10px)
+    padding: 5px 10px
+    background-color: #efefef
+    border: 1px solid #AAACAD
+  div.tip
+    position: absolute
+    background-repeat:no-repeat
+    width: 13px
+    height: 12px
+
+    &.below
+      background-image: url(images/tip-top.png)
+      background-position: top center
+    &.above
+      background-image: url(images/tip-bottom.png)
+      background-position: bottom center
+
+
+  div.confirmation-dialog-content
+    text-align: center
+    div.message
+      padding-bottom: 5px
+    div.toolbar
+      padding: 7px 0px
+      a
+        margin: 0px 5px

@@ -1,0 +1,13 @@
+/*
+* jqDialog - jQuery plugin for rendering dialog
+*
+* Version: @VERSION
+* Copyright 2011 Alex Tkachev
+*
+* Dual licensed under MIT or GPLv2 licenses
+*   http://en.wikipedia.org/wiki/MIT_License
+*   http://en.wikipedia.org/wiki/GNU_General_Public_License
+*
+* Date: @DATE
+*/
+

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>dialog examples</title>
+  <!-- Include latest jQuery -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+
+  <!-- Include plugin code testing framework -->
+  <link rel="Stylesheet" media="screen" href="../dist/css/jquery.dialog.css"/>
+  <script type="text/javascript" src="jquery.ui.position-1.8.14.js"></script>
+  <script type="text/javascript" src="../src/jquery.dialog.js"></script>
+
+  <!-- Include project source files -->
+  <!-- Include unit test files -->
+  <script type="text/javascript">
+
+    $(document).ready(function(){
+      $('a.dialogPos').click(function(){
+        var $this = $(this);
+        $.dialog({ content: '<div>yoyo<div>puki</div></div>', position: {my: $this.data('pos-my'), at: $this.data('pos-at'), of: $this} });
+      });
+
+      $('a.dialogEvents').click(function(){
+        var $this = $(this);
+        $.dialog({
+          position: {of: $this, my: 'left bottom', at: 'left top'},
+          content: $('<div>what up?</div><div><a href="javascript:;">Yes</a> | <a href="javascript:;" onclick="$.dialog.hide()">No</a></div>'),
+          events: {
+            show: function(){ $('div.eventLog').append($('<div/>').html('show event')) },
+            hide: function(){ $('div.eventLog').append($('<div/>').html('hide event')) }
+          }
+        });
+      });
+
+      $('a.dialogConfirm').click(function(){
+         var $this = $(this);
+        $.dialog({
+          position: {of: $this},
+          type: 'confirm', 
+          content: {message: 'whats up puki?'}
+        });
+      });
+
+      $('a.dialogConfirm2').click(function(){
+         var $this = $(this);
+        $.dialog({
+          position: {of: $this},
+          type: 'confirm',
+          content: {message: 'whats up puki?', yes: {cls: 'button2 green'}, no: {cls: 'button2 gray'}}
+        });
+      });
+
+      $('a.dialogConfirmDefaults').click(function(){
+        var $this = $(this);
+        $.fn.dialog.types.confirm.defaults = $.extend(true, $.fn.dialog.types.confirm.defaults, {
+          position: {my: 'left bottom', at: 'left top'},
+          content: {yes: {cls: 'button2 gray'}, no: {cls: 'button2 green'}}
+        });
+      });
+    });
+
+
+
+  </script>
+
+  <style type="text/css">
+    h1, h2, h3, h4{
+      margin-bottom: 5px
+    }
+
+    a.button2{
+      display: inline;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      border-radius: 5px;
+      white-space: nowrap;
+      text-align: center;
+      box-sizing: content-box;
+      border: 1px solid #6d6d6d;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      font-family: Arial, serif;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 5px 10px;
+    }
+
+    a.button2.green{
+      border: 1px solid #7B9D54;
+      background-color: #AECB68;
+    }
+    a.button2.gray{
+      border: 1px solid #6D6D6D;
+      background-color: #8F8F8F;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>dialog examples</h1>
+
+<div style="text-align: center;">
+  <h3>Positions</h3>
+  <a href="javascript:;" class="dialogPos" data-pos-my="left top" data-pos-at="left bottom">Bottom left</a>
+  |
+  <a href="javascript:;" class="dialogPos" data-pos-my="left bottom" data-pos-at="left top">Top left</a>
+  |
+  <a href="javascript:;" class="dialogPos" data-pos-my="right top" data-pos-at="right bottom">Bottom right</a>
+  |
+  <a href="javascript:;" class="dialogPos" data-pos-my="right bottom" data-pos-at="right top">Top right</a>
+</div>
+
+<div>
+  <h3>Events</h3>
+  <a href="javascript:;" class="dialogEvents" >show</a>
+  <div class="eventLog"></div>
+</div>
+
+<div>
+  <h3>Confirm dialog</h3>
+  <a href="javascript:;" class="dialogConfirm" >show default</a>
+  <a href="javascript:;" class="dialogConfirm2" >style buttons</a>
+  <a href="javascript:;" class="dialogConfirmDefaults" >set defaults for confirm</a>
+</div>
+
+</body>
+</html>

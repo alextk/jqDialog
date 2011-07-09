@@ -1,0 +1,28 @@
+div.dialog-container {
+  width: 180px;
+  position: absolute; }
+  div.dialog-container div.content {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: #efefef;
+    border: 1px solid #aaacad; }
+  div.dialog-container div.tip {
+    position: absolute;
+    width: 13px;
+    height: 12px; }
+    div.dialog-container div.tip.below {
+      background-image: url(images/tip-top.png);
+      background-position: top center; }
+    div.dialog-container div.tip.above {
+      background-image: url(images/tip-bottom.png);
+      background-position: bottom center; }
+  div.dialog-container div.confirmation-dialog-content {
+    text-align: center; }
+    div.dialog-container div.confirmation-dialog-content div.message {
+      padding-bottom: 5px; }
+    div.dialog-container div.confirmation-dialog-content div.toolbar {
+      padding: 7px 0px; }
+      div.dialog-container div.confirmation-dialog-content div.toolbar a {
+        margin: 0px 5px; }
