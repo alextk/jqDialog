@@ -60,6 +60,22 @@
           content: {yes: {cls: 'button2 gray'}, no: {cls: 'button2 green'}}
         });
       });
+
+      $('a.dialogConfirmEvents').click(function(){
+        var $this = $(this);
+        $.dialog({
+          type: 'confirm',
+          position: {of: $this, my: 'left bottom', at: 'left top'},
+          content: {message: 'click on buttons'},
+          events: {
+            show: function(){ $('div.eventLog2').append($('<div/>').html('show event')) },
+            hide: function(){ $('div.eventLog2').append($('<div/>').html('hide event')) },
+            yes: function(){ $('div.eventLog2').append($('<div/>').html('yes event')) },
+            no: function(){ $('div.eventLog2').append($('<div/>').html('no event')) }
+          }
+        });
+      });
+
     });
 
 
@@ -68,7 +84,12 @@
 
   <style type="text/css">
     h1, h2, h3, h4{
-      margin-bottom: 5px
+      margin: 5px 0px
+    }
+
+    div.panel{
+      padding: 5px;
+      border: 1px solid #aaa;
     }
 
     a.button2{
@@ -104,7 +125,7 @@
 
 <h1>dialog examples</h1>
 
-<div style="text-align: center;">
+<div class="panel" style="text-align: center;">
   <h3>Positions</h3>
   <a href="javascript:;" class="dialogPos" data-pos-my="left top" data-pos-at="left bottom">Bottom left</a>
   |
@@ -115,17 +136,21 @@
   <a href="javascript:;" class="dialogPos" data-pos-my="right bottom" data-pos-at="right top">Top right</a>
 </div>
 
-<div>
+<div class="panel">
   <h3>Events</h3>
   <a href="javascript:;" class="dialogEvents" >show</a>
   <div class="eventLog"></div>
 </div>
 
-<div>
+<div class="panel">
   <h3>Confirm dialog</h3>
   <a href="javascript:;" class="dialogConfirm" >show default</a>
   <a href="javascript:;" class="dialogConfirm2" >style buttons</a>
   <a href="javascript:;" class="dialogConfirmDefaults" >set defaults for confirm</a>
+
+  <a href="javascript:;" class="dialogConfirmEvents" >Events</a>
+  <div class="eventLog2"></div>
+
 </div>
 
 </body>

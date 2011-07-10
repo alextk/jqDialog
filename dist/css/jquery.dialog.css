@@ -1,17 +1,19 @@
 div.dialog-container {
-  width: 180px;
+  min-width: 100px;
   position: absolute; }
   div.dialog-container div.content {
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
     padding: 5px 10px;
-    background-color: #efefef;
-    border: 1px solid #aaacad; }
+    background-color: #fafafa;
+    border: 1px solid #b3b3b3;
+    -webkit-box-shadow: 0px 0px 1px #333333;
+    -moz-box-shadow: 0px 0px 1px #333333; }
   div.dialog-container div.tip {
     position: absolute;
-    width: 13px;
-    height: 12px; }
+    width: 9px;
+    height: 9px; }
     div.dialog-container div.tip.below {
       background-image: url(images/tip-top.png);
       background-position: top center; }

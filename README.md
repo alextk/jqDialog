@@ -1,9 +1,15 @@
 # [jqDialog]() - jQuery plugin for progress bar ui widget
 ================================
 
+Dependencies
+-------------------
+jQuery
+jQuery.ui.position
+
 Usage
 ---------------------
 See wiki on github: https://github.com/alextk/jqDialog/wiki
+
 
 Pre-compiled scripts
 --------------------
@@ -47,9 +53,9 @@ To generate documentation using jGrouseDoc-2.1 (will create docs folder inside d
 
   make doc
 
-To build and test the source code against JSLint type this:
+To build and test the source code against JSHint type this:
 
-	make lint
+	make hint
 
 Finally, you can remove all the built files using the command:
 
