@@ -15,9 +15,9 @@
 
     show: function(options) {
       this.options = options;
-      if (!this.el) this.el = createUI();
+      if (!this.el) this.el = this._createUI();
 
-      $('div.content', this.el).html(options.type(options));
+      $('div.content', this.el).html(options.type(this));
 
       this.el.show();
 
@@ -33,20 +33,32 @@
       this.el.position(options.position);
       tip.position({my: options.position.at, at: options.position.my, of: $('div.content', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
-      $(document).bind('mousedown', {dialog: this}, this.onDocumntMouseDown);
+      $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
 
-      if ($.isFunction(this.options.events.show)) this.options.events.show();
+      this._invokeCallback('show');
     },
 
     hide: function() {
-      $(document).unbind('mousedown', this.onDocumntMouseDown);
+      $(document).unbind('mousedown', this._onDocumntMouseDown);
       this.el.hide();
-      if ($.isFunction(this.options.events.hide)) {
-        this.options.events.hide();
-      }
+      this._invokeCallback('hide');
+    },
+    
+    _createUI: function() {
+      return $(
+        '<div class="dialog-container">' +
+          '<div class="tip"/>' +
+          '<div class="content"/>' +
+          '</div>'
+      ).appendTo('body').hide();
     },
 
-    onDocumntMouseDown: function(event) {
+    _invokeCallback: function(callbackName) {
+      var callback = this.options.events[callbackName];
+      if ($.isFunction(callback)) callback.apply(this.options.events.context || callback);
+    },
+
+    _onDocumntMouseDown: function(event) {
       var target = $(event.target);
       if (target.closest('div.dialog-container').length === 0) {
         event.data.dialog.hide();
@@ -56,23 +68,13 @@
   });
 
 
-  function createUI() {
-    return $(
-      '<div class="dialog-container">' +
-        '<div class="tip"/>' +
-        '<div class="content"/>' +
-        '</div>'
-    ).appendTo('body').hide();
-  }
-
-
   $.fn.dialog = function(options) {
 
   };
 
   $.fn.dialog.types = {
-    simple: function(options) {
-      return options.content;
+    simple: function(dialog) {
+      return dialog.options.content;
     },
     confirm: (function() {
 
@@ -90,15 +92,16 @@
         return el;
       }
 
-      var func = function(options) {
+      var func = function(dialog) {
+        var options = dialog.options;
         var el = createUI(options.content);
         $('a.no', el).click(function() {
           $.dialog.hide();
-          if($.isFunction(options.events.no)) options.events.no();
+          dialog.invokeCallback('no');
         });
         $('a.yes', el).click(function() {
           $.dialog.hide();
-          if($.isFunction(options.events.yes)) options.events.yes();
+          dialog.invokeCallback('yes');
         });
         return el;
       };

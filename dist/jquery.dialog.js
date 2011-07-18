@@ -8,7 +8,7 @@
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: Sat Jul 9 13:31:34 2011 +0300
+* Date: Sun Jul 10 11:16:58 2011 +0300
 */
 
 (function($) {
@@ -26,11 +26,11 @@
 
     },
 
-    show: function(options){
+    show: function(options) {
       this.options = options;
-      if(!this.el) this.el = createUI();
+      if (!this.el) this.el = createUI();
 
-      $('div.content', this.el).html(options.type(options));
+      $('div.content', this.el).html(options.type(this));
 
       this.el.show();
 
@@ -41,29 +41,30 @@
 
       var rightTarget = options.position.at.indexOf('right') >= 0;
 
-      options.position.offset = '0 '+(aboveTarget ? -tip.height() : tip.height());
+      options.position.offset = '0 ' + (aboveTarget ? -tip.height() : tip.height());
 
       this.el.position(options.position);
-      tip.position({my: options.position.at, at: options.position.my, of: $('div.content', this.el), offset: (rightTarget ? -tip.width() : tip.width())+' 0'});
+      tip.position({my: options.position.at, at: options.position.my, of: $('div.content', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
       $(document).bind('mousedown', {dialog: this}, this.onDocumntMouseDown);
 
-      if(this.options.events.show){
-        this.options.events.show();
-      }
+      this.invokeCallback('show');
     },
 
-    hide: function(){
+    hide: function() {
       $(document).unbind('mousedown', this.onDocumntMouseDown);
       this.el.hide();
-      if(this.options.events.hide){
-        this.options.events.hide();
-      }
+      this.invokeCallback('hide');
     },
 
-    onDocumntMouseDown: function(event){
+    invokeCallback: function(callbackName){
+      var callback = this.options.events[callbackName];
+      if ($.isFunction(callback)) callback.apply(this.options.events.context || callback);
+    },
+
+    onDocumntMouseDown: function(event) {
       var target = $(event.target);
-      if(target.closest('div.dialog-container').length === 0) {
+      if (target.closest('div.dialog-container').length === 0) {
         event.data.dialog.hide();
       }
     }
@@ -76,7 +77,7 @@
       '<div class="dialog-container">' +
         '<div class="tip"/>' +
         '<div class="content"/>' +
-      '</div>'
+        '</div>'
     ).appendTo('body').hide();
   }
 
@@ -86,26 +87,40 @@
   };
 
   $.fn.dialog.types = {
-    simple: function(options){
-      return options.content;
+    simple: function(dialog) {
+      return dialog.options.content;
     },
-    confirm: (function(){
+    confirm: (function() {
 
-      function createUI(content){
+      function createUI(content) {
         var el = $('<div class="confirmation-dialog-content">' +
-                    '<div class="message"/>' +
-                    '<div class="toolbar">' +
-                        '<a href="javascript:;" class="yes"/>' +
-                        '<a href="javascript:;" class="no"/>' +
-                    '</div>' +
-                  '</div>');
+          '<div class="message"/>' +
+          '<div class="toolbar">' +
+          '<a href="javascript:;" class="yes"/>' +
+          '<a href="javascript:;" class="no"/>' +
+          '</div>' +
+          '</div>');
         $('a.yes', el).html(content.yes.text).addClass(content.yes.cls);
         $('a.no', el).html(content.no.text).addClass(content.no.cls);
         $('div.message', el).html(content.message);
         return el;
       }
 
-      var defaults = {
+      var func = function(dialog) {
+        var options = dialog.options;
+        var el = createUI(options.content);
+        $('a.no', el).click(function() {
+          $.dialog.hide();
+          dialog.invokeCallback('no');
+        });
+        $('a.yes', el).click(function() {
+          $.dialog.hide();
+          dialog.invokeCallback('yes');
+        });
+        return el;
+      };
+
+      func.defaults = {
         content: {
           message: 'are you sure?',
           yes: {text: 'Yes', cls: 'button'},
@@ -113,13 +128,6 @@
         }
       };
 
-      var func = function(options){
-        //options = $.extend(true, {}, defaults, options);
-        var el = createUI(options.content);
-        $('a.no', el).click(function(){ $.dialog.hide(); });
-        return el;
-      };
-      func.defaults = defaults;
 
       return func;
 
@@ -135,18 +143,18 @@
 
   var instance = new DialogClass();
 
-  $.dialog = function(options){
+  $.dialog = function(options) {
     options = $.extend({type: $.fn.dialog.defaults.type}, options || {});
 
     var dialogType = options.type = $.fn.dialog.types[options.type];
-    if(!$.isFunction(dialogType)) throw 'unknown dialog type ' + options.type;
+    if (!$.isFunction(dialogType)) throw 'unknown dialog type ' + options.type;
 
     options = $.extend(true, {}, $.fn.dialog.defaults, dialogType.defaults || {}, options);
     instance.show(options);
   };
 
   $.extend($.dialog, {
-    hide: function(){
+    hide: function() {
       instance.hide();
     }
   });
