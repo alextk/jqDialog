@@ -34,6 +34,7 @@ doc:
 build/create_dist: 
 	@@mkdir -p ${DIST_DIR}
 	@@mkdir -p ${DIST_DIR}/css
+	@@mkdir -p ${DIST_DIR}/i18n
 	
 #join all files into one, add version and licence to the head of the file	
 js: build/create_dist
@@ -45,6 +46,7 @@ css: build/create_dist
 	@@echo "Building" ${JS} " css files"
 	sass --update ${SRC_DIR}/sass:dist/css
 	cp -R ${SRC_DIR}/sass/images dist/css
+	cp -R ${SRC_DIR}/i18n/* ${DIST_DIR}/i18n
 	
 #run JSHint checks on the joined file (using node.js)
 hint: js

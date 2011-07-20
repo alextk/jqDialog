@@ -8,7 +8,7 @@
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: Mon Jul 18 11:13:59 2011 +0300
+* Date: Wed Jul 20 13:42:10 2011 +0300
 */
 
 (function($) {
