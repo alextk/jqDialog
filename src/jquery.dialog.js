@@ -104,11 +104,11 @@
         var el = createUI(options.content);
         $('a.no', el).click(function() {
           $.dialog.hide();
-          dialog.invokeCallback('no');
+          dialog._invokeCallback('no');
         });
         $('a.yes', el).click(function() {
           $.dialog.hide();
-          dialog.invokeCallback('yes');
+          dialog._invokeCallback('yes');
         });
         return el;
       };
