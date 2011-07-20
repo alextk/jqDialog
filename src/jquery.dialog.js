@@ -43,7 +43,7 @@
       this.el.hide();
       this._invokeCallback('hide');
     },
-    
+
     _createUI: function() {
       return $(
         '<div class="dialog-container">' +
@@ -67,12 +67,19 @@
 
   });
 
+  var instance = new DialogClass();
 
-  $.fn.dialog = function(options) {
+  $.dialog = {};
+  $.dialog.i18n = $.i18n();
 
+  $.dialog.defaults = {
+    type: 'simple',
+    content: '',
+    position: {my: 'left top', at: 'left bottom'},
+    events: {}
   };
 
-  $.fn.dialog.types = {
+  $.dialog.types = {
     simple: function(dialog) {
       return dialog.options.content;
     },
@@ -106,12 +113,14 @@
         return el;
       };
 
-      func.defaults = {
-        content: {
-          message: 'are you sure?',
-          yes: {text: 'Yes', cls: 'button'},
-          no: {text: 'No', cls: 'button'}
-        }
+      func.defaults = function() {
+        return {
+          content: {
+            message: $.dialog.i18n.t('confirm.message'), //'are you sure?',
+            yes: {text: $.dialog.i18n.t('confirm.yes'), cls: 'button'},
+            no: {text: $.dialog.i18n.t('confirm.no'), cls: 'button'}
+          }
+        };
       };
 
 
@@ -120,29 +129,23 @@
     })()
   };
 
-  $.fn.dialog.defaults = {
-    type: 'simple',
-    content: '',
-    position: {my: 'left top', at: 'left bottom'},
-    events: {}
-  };
-
-  var instance = new DialogClass();
-
-  $.dialog = function(options) {
-    options = $.extend({type: $.fn.dialog.defaults.type}, options || {});
-
-    var dialogType = options.type = $.fn.dialog.types[options.type];
-    if (!$.isFunction(dialogType)) throw 'unknown dialog type ' + options.type;
-
-    options = $.extend(true, {}, $.fn.dialog.defaults, dialogType.defaults || {}, options);
-    instance.show(options);
-  };
-
   $.extend($.dialog, {
+
+    show: function(options) {
+      options = $.extend({type: $.dialog.defaults.type}, options || {});
+
+      var dialogType = options.type = $.dialog.types[options.type];
+      if (!$.isFunction(dialogType)) throw 'unknown dialog type ' + options.type;
+
+      if($.isFunction(dialogType.defaults)) dialogType.defaults = dialogType.defaults(); //invoke function so if i18n translation is used for messages or text, the translations already has been loaded
+      options = $.extend(true, {}, $.dialog.defaults, dialogType.defaults || {}, options);
+      instance.show(options);
+    },
+
     hide: function() {
       instance.hide();
     }
   });
+
 
 })(jQuery);

@@ -4,7 +4,9 @@
 Dependencies
 -------------------
 jQuery
-jQuery.ui.position
+jquery.ui.position >= 1.8.14
+jqI18n plugin for localization
+
 
 Usage
 ---------------------
