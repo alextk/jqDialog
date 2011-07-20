@@ -93,9 +93,9 @@
           '<a href="javascript:;" class="no"/>' +
           '</div>' +
           '</div>');
-        $('a.yes', el).html(content.yes.text).addClass(content.yes.cls);
-        $('a.no', el).html(content.no.text).addClass(content.no.cls);
-        $('div.message', el).html(content.message);
+        $('a.yes', el).html(content.yes.text || $.dialog.i18n.t('confirm.yes')).addClass(content.yes.cls);
+        $('a.no', el).html(content.no.text || $.dialog.i18n.t('confirm.no')).addClass(content.no.cls);
+        $('div.message', el).html(content.message || $.dialog.i18n.t('confirm.message'));
         return el;
       }
 
@@ -113,16 +113,12 @@
         return el;
       };
 
-      func.defaults = function() {
-        return {
-          content: {
-            message: $.dialog.i18n.t('confirm.message'), //'are you sure?',
-            yes: {text: $.dialog.i18n.t('confirm.yes'), cls: 'button'},
-            no: {text: $.dialog.i18n.t('confirm.no'), cls: 'button'}
-          }
-        };
+      func.defaults = {
+        content: {
+          yes: {cls: 'button'},
+          no: {cls: 'button'}
+        }
       };
-
 
       return func;
 
@@ -137,7 +133,7 @@
       var dialogType = options.type = $.dialog.types[options.type];
       if (!$.isFunction(dialogType)) throw 'unknown dialog type ' + options.type;
 
-      if($.isFunction(dialogType.defaults)) dialogType.defaults = dialogType.defaults(); //invoke function so if i18n translation is used for messages or text, the translations already has been loaded
+      if ($.isFunction(dialogType.defaults)) dialogType.defaults = dialogType.defaults(); //invoke function so if i18n translation is used for messages or text, the translations already has been loaded
       options = $.extend(true, {}, $.dialog.defaults, dialogType.defaults || {}, options);
       instance.show(options);
     },

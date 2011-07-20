@@ -22,12 +22,10 @@
     $(document).ready(function(){
       var localesCombo = $('select.currentLocale');
       $.dialog.i18n.locale(localesCombo.val());
-      var confirmDefaultsFunc = $.dialog.types.confirm.defaults;
 
       localesCombo.change(function(){
         console.warn($(this).val());
         $.dialog.i18n.locale($(this).val());
-        $.dialog.types.confirm.defaults = confirmDefaultsFunc;
       });
 
 
