@@ -1,14 +1,14 @@
 /*
-* jqDialog - jQuery plugin for creating dialog hovering div
+* @project.name - @project.description
 *
-* Version: 0.0.1
-* Build: 3
+* Version: @project.version
+* Build: @build.number
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 31/07/2011 19:22:28
+* Date: @date
 */
 

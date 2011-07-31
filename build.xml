@@ -1,0 +1,154 @@
+<project default="all" basedir=".">
+  <!-- set global properties for this build -->
+  <property prefix="project" file="build/build.properties"/>
+  <property name="srcDir" location="src"/>
+  <property name="distDir" location="dist"/>
+  <property name="distFilePath" location="${distDir}/${project.fileName}"/>
+  <property name="buildDir" location="build"/>
+  <property name="buildTools.nodejs" value="c:/mingw/bin/node.exe"/>
+  <property name="licenseFile" location="${basedir}/license.txt"/>
+  <property name="jGrouseDoc" location="c:/devl/js/tools/jGrouseDoc-2.1"/>
+
+  <target name="init" description="create dist directory structure">
+    <mkdir dir="${distDir}"/>
+    <mkdir dir="${distDir}/css"/>
+    <tstamp>
+      <format property="datetime.now" pattern="dd/MM/yyyy HH:mm:ss"/>
+    </tstamp>
+    <echo message="Datetime: ${datetime.now}, project.name=${project.version}"/>
+    <buildnumber file="${buildDir}/build.number"/>
+    <copy file="${buildDir}/license.tpl.txt" tofile="${licenseFile}" overwrite="true"/>
+    <!--First copy license.txt and replace version numbers in it including some other vars-->
+    <replace file="${licenseFile}" value="">
+      <replacefilter token="@project.name" value="${project.name}"/>
+      <replacefilter token="@project.description" value="${project.description}"/>
+      <replacefilter token="@date" value="${datetime.now}"/>
+      <replacefilter token="@project.version" value="${project.version}"/>
+      <replacefilter token="@build.number" value="${build.number}"/>
+    </replace>
+  </target>
+
+  <target name="all" depends="clean, pack, css, doc"/>
+
+  <target name="js" depends="init" description="join all javascript files into one, add version and license to the head of the joined file">
+    <echo message="Building single js file: ${distFilePath}.js"/>
+    <concat destfile="${distFilePath}.js">
+      <fileset file="${licenseFile}"/>
+      <fileset dir="${srcDir}" includes="base.js"/>
+      <fileset dir="${srcDir}" includes="dialog.js"/>
+      <fileset dir="${srcDir}" includes="type-simple.js"/>
+      <fileset dir="${srcDir}" includes="type-confirm.js"/>
+    </concat>
+
+    <copy todir="${distDir}/i18n">
+      <fileset dir="${srcDir}/i18n"/>
+    </copy>
+  </target>
+
+  <target name="hint" depends="js" description="Run JSHint checks on the joined javsacript file">
+    <echo message="Running JSHint on ${distFilePath}.js ..."/>
+    <exec executable="cmd.exe" outputproperty="output">
+      <arg line="/c ${buildTools.nodejs} ${buildDir}/tools/jshint-check.js ${distFilePath}.js"/>
+    </exec>
+    <echo message="${output}"/>
+  </target>
+
+  <target name="min" depends="js" description="run node.js with uglify script that compresses the js, remove all comments. add copyright notice to the head of the file">
+    <echo message="Minifying: creating ${distFilePath}.min.js..."/>
+    <echo message="${buildTools.nodejs} ${buildDir}/tools/uglify.js --unsafe"/>
+
+    <exec executable="cmd.exe" outputproperty="output">
+      <arg line="/c ${buildTools.nodejs} ${buildDir}/tools/uglify.js --unsafe  ${distFilePath}.js > ${distDir}/tmp.min.js"/>
+    </exec>
+    <echo message="${output}"/>
+
+    <concat destfile="${distFilePath}.min.js">
+      <fileset file="${licenseFile}"/>
+      <fileset file="${distDir}/tmp.min.js"/>
+    </concat>
+    <delete file="${distDir}/tmp.min.js"/>
+  </target>
+
+  <target name="pack" depends="min" description="run rhino server and pack minified js file into even smaller size. add copyright notice at the start">
+    <echo message="Packing: creating ${distFilePath}.pack.js..."/>
+
+     <java
+           dir="${buildDir}/tools"
+           jar="${buildDir}/tools/rhino.jar"
+           fork="true"
+           failonerror="true"
+           maxmemory="128m"
+           >
+         <arg value="${buildDir}/tools/packer.js"/>
+         <arg value="${distFilePath}.min.js"/>
+         <arg value="${distDir}/tmp.pack.js"/>
+         <classpath>
+           <pathelement location="${buildDir}/tools/rhino.jar"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+
+    <concat destfile="${distFilePath}.pack.js">
+      <fileset file="${licenseFile}"/>
+      <fileset file="${distDir}/tmp.pack.js"/>
+    </concat>
+
+    <delete file="${distDir}/tmp.pack.js"/>
+  </target>
+
+  <target name="css" description="Create css for sass for this plugin">
+    <echo message="Building css files..."/>
+
+    <exec executable="cmd.exe" outputproperty="output">
+      <arg line="/c sass -C --update src/sass:dist/css"/>
+    </exec>
+    <copy todir="${distDir}/css/images">
+      <fileset dir="${srcDir}/sass/images"/>
+    </copy>
+    <echo message="${output}"/>
+  </target>
+
+  <target name="doc" description="Create documentation using jGrouseDoc-2.1 toolkit">
+    <echo message="Creating documentation using jGrouseDoc-2.1 toolkit into ${distDir}/doc"/>
+
+    <ant antfile="${jGrouseDoc}/build.xml" dir="${basedir}">
+      <property name="jGrouseHome" value="${jGrouseDoc}"/>
+      <property name="inputDir" value="${srcDir}"/>
+      <property name="outputDir" value="${basedir}/docs"/>
+    </ant>
+  </target>
+
+  <target name="version">
+    <input message="Please provide new version for this project (current version is ${project.version}:" addproperty="project.newVersion"/>
+    <propertyfile file="${buildDir}/build.properties">
+      <entry key="version" value="${project.newVersion}"/>
+    </propertyfile>
+  </target>
+
+  <target name="release" depends="pack" description="This command creates new git tag with project version, and pushes the tag to git">
+    <echo message="Adding files for committ..."/>
+    <exec executable="git" dir="${basedir}" failonerror="true">
+      <arg line="add -A" />
+    </exec>
+    <echo message="Committing files before release..."/>
+    <exec executable="git" dir="${basedir}" failonerror="true">
+      <arg line="commit -m 'commiting files for release of version ${project.version}'" />
+    </exec>
+    <echo message="Pushing version release to master..."/>
+    <exec executable="git" dir="${basedir}" inputstring="${passphrase}">
+      <arg line="push" />
+    </exec>
+    <echo message="Creating git tag for version ${project.version}..."/>
+    <exec executable="git" dir="${basedir}" failonerror="true">
+      <arg line="tag 'v${project.version}'" />
+    </exec>
+    <echo message="Pushing tags to github..."/>
+    <exec executable="git" dir="${basedir}" inputstring="${passphrase}">
+      <arg line="push --tags" />
+    </exec>
+  </target>
+
+  <target name="clean" description="clean up dist directory">
+    <delete dir="${distDir}"/>
+  </target>
+</project>

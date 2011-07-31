@@ -1,4 +1,4 @@
-# [jqDialog]() - jQuery plugin for progress bar ui widget
+# [jqDialog]() - jQuery plugin for creating dialog hovering div
 ================================
 
 Dependencies

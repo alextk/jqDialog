@@ -11,7 +11,10 @@
   <link rel="Stylesheet" media="screen" href="../dist/css/jquery.dialog.css"/>
   <script type="text/javascript" src="../lib/jquery.ui.position-1.8.14.js"></script>
   <script type="text/javascript" src="../lib/jquery.i18n.js"></script>
-  <script type="text/javascript" src="../src/jquery.dialog.js"></script>
+  <script type="text/javascript" src="../src/base.js"></script>
+  <script type="text/javascript" src="../src/dialog.js"></script>
+  <script type="text/javascript" src="../src/type-simple.js"></script>
+  <script type="text/javascript" src="../src/type-confirm.js"></script>
   <script type="text/javascript" src="../src/i18n/en-US.js"></script>
   <script type="text/javascript" src="../src/i18n/he-IL.js"></script>
 
@@ -38,10 +41,19 @@
         var $this = $(this);
         $.dialog.show({
           position: {of: $this, my: 'left bottom', at: 'left top'},
-          content: $('<div>what up?</div><div><a href="javascript:;">Yes</a> | <a href="javascript:;" onclick="$.dialog.hide()">No</a></div>'),
+          content: 'whats up?',
+          buttons: {
+            good: {text: 'Good', action: function(){ console.info('da good'); }},
+            bad: {text: 'Bad'},
+            sos: {text: 'Same old shit'}
+          },
+          toolbar: ['good', 'sos', 'bad'],
           events: {
             show: function(){ $('div.eventLog').append($('<div/>').html('show event')) },
-            hide: function(){ $('div.eventLog').append($('<div/>').html('hide event')) }
+            hide: function(){ $('div.eventLog').append($('<div/>').html('hide event')) },
+            good: function(){ $('div.eventLog').append($('<div/>').html('good event')) },
+            bad: function(){ $('div.eventLog').append($('<div/>').html('bad event')) },
+            sos: function(){ $('div.eventLog').append($('<div/>').html('sos event')) }
           }
         });
       });
@@ -59,7 +71,11 @@
         $.dialog.show({
           position: {of: $this},
           type: 'confirm',
-          content: {message: 'whats up puki?', yes: {cls: 'button2 green'}, no: {cls: 'button2 gray'}}
+          content: 'whats up puki?',
+          buttons: {
+            yes: {cls: 'button2 green'},
+            no: {cls: 'button2 gray'}
+          }
         });
       });
 
@@ -67,7 +83,10 @@
         var $this = $(this);
         $.dialog.types.confirm.defaults = $.extend(true, $.dialog.types.confirm.defaults, {
           position: {my: 'left bottom', at: 'left top'},
-          content: {yes: {cls: 'button2 gray'}, no: {cls: 'button2 green'}}
+          buttons: {
+            yes: {cls: 'button2 green'},
+            no: {cls: 'button2 gray'}
+          }
         });
       });
 
@@ -76,7 +95,7 @@
         $.dialog.show({
           type: 'confirm',
           position: {of: $this, my: 'left bottom', at: 'left top'},
-          content: {message: 'click on buttons'},
+          content: 'click on buttons',
           events: {
             show: function(){ $('div.eventLog2').append($('<div/>').html('show event')) },
             hide: function(){ $('div.eventLog2').append($('<div/>').html('hide event')) },
@@ -85,10 +104,6 @@
           }
         });
       });
-
-
-
-
     });
 
 

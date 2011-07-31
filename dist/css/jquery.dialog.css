@@ -1,7 +1,7 @@
 div.dialog-container {
   min-width: 100px;
   position: absolute; }
-  div.dialog-container div.content {
+  div.dialog-container div.container {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
@@ -10,6 +10,11 @@ div.dialog-container {
     border: 1px solid #b3b3b3;
     -webkit-box-shadow: 0px 0px 1px #333333;
     -moz-box-shadow: 0px 0px 1px #333333; }
+    div.dialog-container div.container div.toolbar {
+      margin-top: 5px;
+      padding: 7px 0px; }
+      div.dialog-container div.container div.toolbar a {
+        margin: 0px 5px; }
   div.dialog-container div.tip {
     position: absolute;
     width: 9px;
@@ -20,11 +25,5 @@ div.dialog-container {
     div.dialog-container div.tip.above {
       background-image: url(images/tip-bottom.png);
       background-position: bottom center; }
-  div.dialog-container div.confirmation-dialog-content {
+  div.dialog-container div.container.confirm {
     text-align: center; }
-    div.dialog-container div.confirmation-dialog-content div.message {
-      padding-bottom: 5px; }
-    div.dialog-container div.confirmation-dialog-content div.toolbar {
-      padding: 7px 0px; }
-      div.dialog-container div.confirmation-dialog-content div.toolbar a {
-        margin: 0px 5px; }

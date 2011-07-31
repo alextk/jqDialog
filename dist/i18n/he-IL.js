@@ -1,7 +1,9 @@
 $.dialog.i18n.register('he-IL', {
-  confirm: {
-    message: 'האם הינך בטוח?',
+  confirm: { message: 'האם הינך בטוח?'},
+  buttons: {
     yes: 'כן',
-    no: 'לא'
+    no: 'לא',
+    approve: 'אישור',
+    cancel: 'ביטול'
   }
 });

@@ -1,34 +1,4 @@
-/*
-* jqDialog - jQuery plugin for creating dialog hovering div
-*
-* Version: 0.0.1
-* Build: 3
-* Copyright 2011 Alex Tkachev
-*
-* Dual licensed under MIT or GPLv2 licenses
-*   http://en.wikipedia.org/wiki/MIT_License
-*   http://en.wikipedia.org/wiki/GNU_General_Public_License
-*
-* Date: 31/07/2011 19:22:28
-*/
-
 (function($) {
-
-  $.dialog = {};
-  $.dialog.i18n = $.i18n();
-
-  $.dialog.defaults = {
-    type: 'simple',
-    content: '',
-    position: {my: 'left top', at: 'left bottom'},
-    events: {},
-    buttons: {},
-    toolbar: []
-  };
-
-  $.dialog.types = { };
-
-})(jQuery);(function($) {
 
   /**
    *
@@ -155,52 +125,6 @@
       instance.hide();
     }
   });
-
-
-})(jQuery);(function($) {
-
-  var SimpleDialogClass = function(){
-    this.initialize.apply(this, arguments);
-  };
-  SimpleDialogClass.defaults = {
-    clsType: 'simple',
-    buttons: {close: {}},
-    toolbar: ['close']
-  };
-
-  $.extend(SimpleDialogClass.prototype, {
-
-    initialize: function() { },
-
-    render: function(dialog){
-      return dialog.options.content;
-    }
-  });
-
-  $.dialog.types.simple = SimpleDialogClass;
-
-
-})(jQuery);(function($) {
-
-  var ConfirmDialogClass = function(){
-    this.initialize.apply(this, arguments);
-  };
-  ConfirmDialogClass.defaults = {
-    clsType: 'confirm',
-    buttons: {yes: {}, no: {}},
-    toolbar: ['yes', 'no']
-  };
-
-  $.extend(ConfirmDialogClass.prototype, {
-
-    initialize: function() { },
-
-    render: function(dialog){
-      return dialog.options.content || $.dialog.i18n.t('confirm.message');
-    }
-  });
-
-  $.dialog.types.confirm = ConfirmDialogClass;
 
 
 })(jQuery);
