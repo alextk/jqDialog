@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 3
+* Build: 4
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 31/07/2011 19:22:28
+* Date: 01/08/2011 16:44:45
 */
 
 (function($) {
@@ -75,6 +75,11 @@
 
 
       this.el.show();
+
+      if(options.position.of.css('direction') == 'rtl'){ //swap left/right positions
+        options.position.my = options.position.my.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+        options.position.at = options.position.at.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+      }
 
       //calculate dialog offset
       var tip = $('div.tip', this.el);

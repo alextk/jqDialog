@@ -46,6 +46,11 @@
 
       this.el.show();
 
+      if(options.position.of.css('direction') == 'rtl'){ //swap left/right positions
+        options.position.my = options.position.my.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+        options.position.at = options.position.at.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+      }
+
       //calculate dialog offset
       var tip = $('div.tip', this.el);
       var aboveTarget = options.position.my.indexOf('bottom') >= 0; //if dialog position is below target element (my contains top)
