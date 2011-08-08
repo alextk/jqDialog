@@ -63,15 +63,17 @@
       this.el.position(options.position);
       tip.position({my: options.position.at, at: options.position.my, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
-      $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
+      $(document).bind('mousedown mousewheel', {dialog: this}, this._onDocumntMouseDown);
 
       this._invokeCallback('show');
+      if(this.options.type.onShow) this.options.type.onShow();
     },
 
     hide: function() {
       $(document).unbind('mousedown', this._onDocumntMouseDown);
       this.el.hide();
       this._invokeCallback('hide');
+      if(this.options.type.onHide) this.options.type.onHide();
     },
 
     _createUI: function() {

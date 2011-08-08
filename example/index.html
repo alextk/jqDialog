@@ -7,10 +7,15 @@
   <!-- Include latest jQuery -->
   <script type="text/javascript" src="../lib/jquery-1.6.2.js"></script>
 
-  <!-- Include plugin code testing framework -->
+  <!--Include plugin css-->
   <link rel="Stylesheet" media="screen" href="../dist/css/jquery.dialog.css"/>
+
+  <!--Include plugin js dependecies-->
   <script type="text/javascript" src="../lib/jquery.ui.position-1.8.14.js"></script>
   <script type="text/javascript" src="../lib/jquery.i18n.js"></script>
+  <script type="text/javascript" src="../lib/jquery.mousewheel.js"></script>
+
+  <!--Include plugin js code-->
   <script type="text/javascript" src="../src/base.js"></script>
   <script type="text/javascript" src="../src/dialog.js"></script>
   <script type="text/javascript" src="../src/type-simple.js"></script>
@@ -104,7 +109,17 @@
           }
         });
       });
+
+
+      $('a.insideScroll').click(function(){
+        var $this = $(this);
+        $.dialog.show({
+          position: {of: $this},
+          type: 'confirm'
+        });
+      });
     });
+
 
 
 
@@ -118,6 +133,18 @@
     div.panel{
       padding: 5px;
       border: 1px solid #aaa;
+    }
+
+    div.panel div.scroll{
+      width: 300px;
+      height: 100px;
+      overflow: scroll;
+      border: 1px solid #aaa;
+    }
+
+    div.panel div.scroll div.content{
+      width: 1000px;
+      height: 1000px;
     }
 
     a.button2{
@@ -185,7 +212,15 @@
 
   <a href="javascript:;" class="dialogConfirmEvents" >Events</a>
   <div class="eventLog2"></div>
+</div>
 
+<div class="panel">
+  <h3>Events</h3>
+  <div class="scroll">
+    <div class="content">
+      <a href="javascript:;" class="insideScroll" >show</a>
+    </div>
+  </div>
 </div>
 
 <div style="direction: rtl">

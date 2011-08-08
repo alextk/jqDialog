@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 4
+* Build: 7
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 01/08/2011 16:44:45
+* Date: 04/08/2011 12:17:12
 */
 
 (function($) {
@@ -93,15 +93,17 @@
       this.el.position(options.position);
       tip.position({my: options.position.at, at: options.position.my, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
-      $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
+      $(document).bind('mousedown mousewheel', {dialog: this}, this._onDocumntMouseDown);
 
       this._invokeCallback('show');
+      if(this.options.type.onShow) this.options.type.onShow();
     },
 
     hide: function() {
       $(document).unbind('mousedown', this._onDocumntMouseDown);
       this.el.hide();
       this._invokeCallback('hide');
+      if(this.options.type.onHide) this.options.type.onHide();
     },
 
     _createUI: function() {
