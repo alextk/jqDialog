@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 7
+* Build: 8
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 04/08/2011 12:17:12
+* Date: 04/10/2011 17:00:31
 */
 
 (function($) {
@@ -59,6 +59,7 @@
           var returnData = self._dialogReturnData(btnConfig.name);
           if(btnConfig.action) btnConfig.action(returnData);
           self._invokeCallback(btnConfig.name, event, returnData);
+          self._invokeCallback('buttonClick', btnConfig.name, event, returnData);
         });
       }
     },
@@ -70,11 +71,10 @@
       //create buttons
       this._createButtons(options);
 
+      this.el.show();
+
       $('div.content', this.el).html(options.type.render(this));
       $('div.container', this.el).attr('class', 'container ' + options.clsType);
-
-
-      this.el.show();
 
       if(options.position.of.css('direction') == 'rtl'){ //swap left/right positions
         options.position.my = options.position.my.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
@@ -154,7 +154,7 @@
       var dialogTypeClass = $.dialog.types[options.type];
       if (!$.isFunction(dialogTypeClass)) throw 'unknown dialog type ' + dialogTypeClass;
 
-      options = $.extend(true, {}, $.dialog.defaults, dialogTypeClass.defaults || {}, options, {type: new dialogTypeClass()});
+      options = $.extend(true, {}, $.dialog.defaults, dialogTypeClass.defaults || {}, options, {type: new dialogTypeClass(instance)});
       instance.show(options);
     },
 
