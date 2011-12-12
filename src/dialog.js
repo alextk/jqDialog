@@ -26,7 +26,7 @@
         btn.click({cfg: cfg}, function(event){
           var btnConfig = event.data.cfg;
           if(!btnConfig.keepVisible) $.dialog.hide();
-          var returnData = self._dialogReturnData(btnConfig.name);
+          var returnData = self._dialogReturnData(btnConfig.name, event);
           if(btnConfig.action) btnConfig.action(returnData);
           self._invokeCallback(btnConfig.name, event, returnData);
           self._invokeCallback('buttonClick', btnConfig.name, event, returnData);
@@ -63,7 +63,7 @@
       this.el.position(options.position);
       tip.position({my: options.position.at, at: options.position.my, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
-      $(document).bind('mousedown mousewheel', {dialog: this}, this._onDocumntMouseDown);
+      $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
 
       this._invokeCallback('show');
       if(this.options.type.onShow) this.options.type.onShow();

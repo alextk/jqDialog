@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 8
+* Build: 25
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 04/10/2011 17:00:31
+* Date: 12 Dec 2011 20:21:04
 */
 
 (function($) {
@@ -28,7 +28,8 @@
 
   $.dialog.types = { };
 
-})(jQuery);(function($) {
+})(jQuery);
+(function($) {
 
   /**
    *
@@ -56,7 +57,7 @@
         btn.click({cfg: cfg}, function(event){
           var btnConfig = event.data.cfg;
           if(!btnConfig.keepVisible) $.dialog.hide();
-          var returnData = self._dialogReturnData(btnConfig.name);
+          var returnData = self._dialogReturnData(btnConfig.name, event);
           if(btnConfig.action) btnConfig.action(returnData);
           self._invokeCallback(btnConfig.name, event, returnData);
           self._invokeCallback('buttonClick', btnConfig.name, event, returnData);
@@ -93,7 +94,7 @@
       this.el.position(options.position);
       tip.position({my: options.position.at, at: options.position.my, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
 
-      $(document).bind('mousedown mousewheel', {dialog: this}, this._onDocumntMouseDown);
+      $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
 
       this._invokeCallback('show');
       if(this.options.type.onShow) this.options.type.onShow();
@@ -164,7 +165,8 @@
   });
 
 
-})(jQuery);(function($) {
+})(jQuery);
+(function($) {
 
   var SimpleDialogClass = function(){
     this.initialize.apply(this, arguments);
@@ -187,7 +189,8 @@
   $.dialog.types.simple = SimpleDialogClass;
 
 
-})(jQuery);(function($) {
+})(jQuery);
+(function($) {
 
   var ConfirmDialogClass = function(){
     this.initialize.apply(this, arguments);
