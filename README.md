@@ -18,9 +18,9 @@ Pre-compiled scripts
 If you're not interested in compiling your own version of jqDialog, you can grab the pre-compiled scripts from the
 [dist](https://github.com/alextk/jqDialog/tree/master/dist/) directory and get started quickly. Otherwise, take a look below.
 
-What you need to build jqLog
+What you need to build jqDialog
 ----------------------------
-In order to build jqLog, you need to ruby 1.8.7, Node.js 0.2 or later, and git 1.7 or later.
+In order to build jqDialog, you need to ruby 1.8.7, Node.js 0.2 or later, and git 1.7 or later.
 (Earlier versions might work OK, but are not tested.)
 
 `rego-js-builder` gem installed:
