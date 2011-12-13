@@ -28,11 +28,6 @@ In order to build jqDialog, you need to ruby 1.8.7, Node.js 0.2 or later, and gi
     gem install rego-js-builder
 
 
-`rake-hooks` gem installed:
-
-    gem install rake-hooks
-
-
 Windows users:
 
    Install [msysgit](https://code.google.com/p/msysgit/) (Full installer for official Git),
