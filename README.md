@@ -44,6 +44,11 @@ Windows users:
 
    To install phyton, simply download it from link on the guide, and add it to PATH variable.
 
+Building to a different directory
+---------------------------------
+If you want to build jqLog to a directory that is different from the default location, you need to edit the Rakefile.
+
+
 Special thanks
 --------------
 Big shout-out to the jQuery team for providing the directory structure and base files for the git repo, as well as the base-files for the new NodeJS build system!
