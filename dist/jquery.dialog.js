@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 25
+* Build: 30
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 12 Dec 2011 20:21:04
+* Date: 21 Dec 2011 13:39:10
 */
 
 (function($) {
@@ -77,22 +77,7 @@
       $('div.content', this.el).html(options.type.render(this));
       $('div.container', this.el).attr('class', 'container ' + options.clsType);
 
-      if(options.position.of.css('direction') == 'rtl'){ //swap left/right positions
-        options.position.my = options.position.my.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
-        options.position.at = options.position.at.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
-      }
-
-      //calculate dialog offset
-      var tip = $('div.tip', this.el);
-      var aboveTarget = options.position.my.indexOf('bottom') >= 0; //if dialog position is below target element (my contains top)
-      tip.toggleClass('above', aboveTarget).toggleClass('below', !aboveTarget);
-
-      var rightTarget = options.position.at.indexOf('right') >= 0;
-
-      options.position.offset = '0 ' + (aboveTarget ? -tip.height() : tip.height());
-
-      this.el.position(options.position);
-      tip.position({my: options.position.at, at: options.position.my, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
+      this.reposition();
 
       $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
 
@@ -105,6 +90,30 @@
       this.el.hide();
       this._invokeCallback('hide');
       if(this.options.type.onHide) this.options.type.onHide();
+    },
+
+    reposition: function(){
+      var options = this.options;
+
+      var positionMy = options.position.my;
+      var positionAt = options.position.at;
+
+      if(options.position.of.css('direction') == 'rtl'){ //swap left/right positions
+        positionMy = positionMy.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+        positionAt = positionAt.replace('right', '_l').replace('left', '_r').replace('_l', 'left').replace('_r', 'right');
+      }
+
+      //calculate dialog offset
+      var tip = $('div.tip', this.el);
+      var aboveTarget = positionMy.indexOf('bottom') >= 0; //if dialog position is below target element (my contains top)
+      tip.toggleClass('above', aboveTarget).toggleClass('below', !aboveTarget);
+
+      var rightTarget = positionAt.indexOf('right') >= 0;
+
+      options.position.offset = '0 ' + (aboveTarget ? -tip.height() : tip.height());
+
+      this.el.position({my: positionMy, at: positionAt, of: options.position.of, offset: options.position.offset});
+      tip.position({my: positionAt, at: positionMy, of: $('div.container', this.el), offset: (rightTarget ? -tip.width() : tip.width()) + ' 0'});
     },
 
     _createUI: function() {
