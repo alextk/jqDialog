@@ -5,7 +5,7 @@
   };
   ConfirmDialogClass.defaults = {
     clsType: 'confirm',
-    buttons: {yes: {}, no: {}},
+    buttons: {yes: {}, no: {keyCode: $.Event.Keys.ESC}},
     toolbar: ['yes', 'no']
   };
 

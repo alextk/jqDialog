@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 30
+* Build: 31
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 21 Dec 2011 13:39:10
+* Date: 03 Jan 2012 00:50:18
 */
 
 (function($) {
@@ -41,7 +41,6 @@
   $.extend(DialogClass.prototype, {
 
     initialize: function() {
-
     },
 
     _createButtons: function(options){
@@ -50,19 +49,24 @@
 
       for(var i=0; i<options.toolbar.length; i++){
         var buttonName = options.toolbar[i];
-        var cfg = options.buttons[buttonName];
+        var cfg = this.options.buttons[buttonName];
         cfg.name = buttonName;
         var btn = $('<a href="javascript:;"/>').addClass(cfg.cls).html(cfg.text || $.dialog.i18n.t('buttons.'+cfg.name));
         toolbar.append(btn);
-        btn.click({cfg: cfg}, function(event){
-          var btnConfig = event.data.cfg;
-          if(!btnConfig.keepVisible) $.dialog.hide();
-          var returnData = self._dialogReturnData(btnConfig.name, event);
-          if(btnConfig.action) btnConfig.action(returnData);
-          self._invokeCallback(btnConfig.name, event, returnData);
-          self._invokeCallback('buttonClick', btnConfig.name, event, returnData);
+
+        btn.click(function(event){
+          self._onButtonClick(buttonName);
         });
       }
+    },
+
+    _onButtonClick: function(buttonName){
+      var btnConfig = this.options.buttons[buttonName];
+      if(!btnConfig.keepVisible) $.dialog.hide();
+      var returnData = this._dialogReturnData(btnConfig.name, event);
+      if(btnConfig.action) btnConfig.action(returnData);
+      this._invokeCallback(btnConfig.name, event, returnData);
+      this._invokeCallback('buttonClick', btnConfig.name, event, returnData);
     },
 
     show: function(options) {
@@ -80,6 +84,7 @@
       this.reposition();
 
       $(document).bind('mousedown', {dialog: this}, this._onDocumntMouseDown);
+      this.el.bind('keydown', {dialog: this}, this._onDialogKeyDown);
 
       this._invokeCallback('show');
       if(this.options.type.onShow) this.options.type.onShow();
@@ -87,6 +92,7 @@
 
     hide: function() {
       $(document).unbind('mousedown', this._onDocumntMouseDown);
+      this.el.unbind('keydown', this._onDialogKeyDown);
       this.el.hide();
       this._invokeCallback('hide');
       if(this.options.type.onHide) this.options.type.onHide();
@@ -147,6 +153,17 @@
       if (target.closest('div.dialog-container').length === 0) {
         event.data.dialog.hide();
       }
+    },
+
+    _onDialogKeyDown: function(event){
+      var self = event.data.dialog;
+      var keyCode = event.which;
+      //find button with this keyCode, and if found, invoke it
+      var btnName = Object.keys(self.options.buttons).select(function(buttonName){ return self.options.buttons[buttonName].keyCode == keyCode }).first();
+      if(btnName) {
+        self._onButtonClick(btnName);
+        event.stopEvent();
+      }
     }
 
   });
@@ -182,7 +199,7 @@
   };
   SimpleDialogClass.defaults = {
     clsType: 'simple',
-    buttons: {close: {}},
+    buttons: {close: {keyCode: $.Event.Keys.ESC}},
     toolbar: ['close']
   };
 
@@ -206,7 +223,7 @@
   };
   ConfirmDialogClass.defaults = {
     clsType: 'confirm',
-    buttons: {yes: {}, no: {}},
+    buttons: {yes: {}, no: {keyCode: $.Event.Keys.ESC}},
     toolbar: ['yes', 'no']
   };
 

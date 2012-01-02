@@ -5,7 +5,7 @@
   };
   SimpleDialogClass.defaults = {
     clsType: 'simple',
-    buttons: {close: {}},
+    buttons: {close: {keyCode: $.Event.Keys.ESC}},
     toolbar: ['close']
   };
 

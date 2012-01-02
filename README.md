@@ -6,6 +6,7 @@ Dependencies
 jQuery >= 1.6.1
 jquery.ui.position >= 1.8.14
 jqI18n plugin for localization
+jqExt plugin for Object.keys method and array enumeration
 
 
 Usage
