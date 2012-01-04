@@ -23,8 +23,8 @@
         var btn = $('<a href="javascript:;"/>').addClass(cfg.cls).html(cfg.text || $.dialog.i18n.t('buttons.'+cfg.name));
         toolbar.append(btn);
 
-        btn.click(function(event){
-          self._onButtonClick(buttonName);
+        btn.click({buttonName: buttonName}, function(event){
+          self._onButtonClick(event.data.buttonName);
         });
       }
     },
