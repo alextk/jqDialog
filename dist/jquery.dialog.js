@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 32
+* Build: 33
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 04 Jan 2012 10:33:27
+* Date: 31 Jan 2012 15:15:32
 */
 
 (function($) {
@@ -55,12 +55,12 @@
         toolbar.append(btn);
 
         btn.click({buttonName: buttonName}, function(event){
-          self._onButtonClick(event.data.buttonName);
+          self._onButtonClick(event.data.buttonName, event);
         });
       }
     },
 
-    _onButtonClick: function(buttonName){
+    _onButtonClick: function(buttonName, event){
       var btnConfig = this.options.buttons[buttonName];
       if(!btnConfig.keepVisible) $.dialog.hide();
       var returnData = this._dialogReturnData(btnConfig.name, event);

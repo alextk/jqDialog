@@ -24,12 +24,12 @@
         toolbar.append(btn);
 
         btn.click({buttonName: buttonName}, function(event){
-          self._onButtonClick(event.data.buttonName);
+          self._onButtonClick(event.data.buttonName, event);
         });
       }
     },
 
-    _onButtonClick: function(buttonName){
+    _onButtonClick: function(buttonName, event){
       var btnConfig = this.options.buttons[buttonName];
       if(!btnConfig.keepVisible) $.dialog.hide();
       var returnData = this._dialogReturnData(btnConfig.name, event);
