@@ -129,7 +129,9 @@
       var keyCode = event.which;
       //find button with this keyCode, and if found, invoke it
       var btnName = Object.keys(self.options.buttons).select(function(buttonName){ return self.options.buttons[buttonName].keyCode == keyCode }).first();
+      var originatingFromTextArea = $(event.target).is('textarea');
       if(btnName) {
+        if(originatingFromTextArea && !event.ctrlKey) return; //do not invoke actions from textrea if unless ctrl is also pressed
         self._onButtonClick(btnName);
         event.stopEvent();
       }

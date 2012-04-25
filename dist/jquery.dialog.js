@@ -2,14 +2,14 @@
 * jqDialog - jQuery plugin for creating dialog hovering div
 *
 * Version: 0.0.1
-* Build: 33
+* Build: 34
 * Copyright 2011 Alex Tkachev
 *
 * Dual licensed under MIT or GPLv2 licenses
 *   http://en.wikipedia.org/wiki/MIT_License
 *   http://en.wikipedia.org/wiki/GNU_General_Public_License
 *
-* Date: 31 Jan 2012 15:15:32
+* Date: 25 Apr 2012 14:13:01
 */
 
 (function($) {
@@ -160,7 +160,9 @@
       var keyCode = event.which;
       //find button with this keyCode, and if found, invoke it
       var btnName = Object.keys(self.options.buttons).select(function(buttonName){ return self.options.buttons[buttonName].keyCode == keyCode }).first();
+      var originatingFromTextArea = $(event.target).is('textarea');
       if(btnName) {
+        if(originatingFromTextArea && !event.ctrlKey) return; //do not invoke actions from textrea if unless ctrl is also pressed
         self._onButtonClick(btnName);
         event.stopEvent();
       }
